@@ -21,6 +21,7 @@ func TestNetworkAddresses(t *testing.T) {
 	require.Equal(t, "a:4000", addrs[0])
 	require.Equal(t, "b:5000", addrs[1])
 	require.Equal(t, "a:4000,b:5000", addrs.String())
+	require.Equal(t, []string{"a:4000", "b:5000"}, addrs.StringSlice())
 }
 
 func TestStrings(t *testing.T) {

@@ -32,6 +32,15 @@ func (a NetworkAddresses) String() string {
 	return strings.Join(a, ",")
 }
 
+// StringSlice returns the network addresses as a slice of string.
+func (a NetworkAddresses) StringSlice() []string {
+	var res []string
+	for _, el := range a {
+		res = append(res, el)
+	}
+	return res
+}
+
 // Strings is a slice of string.
 // Use it as a flag value when you want to pass a comma-separated list of strings to a flag
 // and have it to be automatically parsed into a slice.
