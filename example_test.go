@@ -55,3 +55,17 @@ func ExampleURL() {
 	// google.com
 	// https://google.com
 }
+
+func ExampleURLs() {
+	var urls flagutil.URLs
+	flag.Var(&urls, "U", "URLs")
+
+	os.Args = append(os.Args, "-U", "https://google.com,https://google.de")
+	flag.Parse()
+
+	fmt.Println(urls[0].String())
+	fmt.Println(urls[1].String())
+	// Output:
+	// https://google.com
+	// https://google.de
+}
