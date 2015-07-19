@@ -38,3 +38,17 @@ func TestStrings(t *testing.T) {
 	require.Equal(t, "baz", strings[2])
 	require.Equal(t, "foo,bar,baz", strings.String())
 }
+
+func TestURL(t *testing.T) {
+	var url flagutil.URL
+	fs := flag.NewFlagSet("default", flag.ContinueOnError)
+	fs.Var(&url, "u", "URL")
+
+	s := []string{"-u", "https://google.com"}
+
+	err := fs.Parse(s)
+	require.Nil(t, err)
+	require.Equal(t, "google.com", url.URL.Host)
+	require.Equal(t, "https", url.URL.Scheme)
+	require.Equal(t, "https://google.com", url.String())
+}

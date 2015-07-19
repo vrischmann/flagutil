@@ -3,6 +3,7 @@ package flagutil
 
 import (
 	"net"
+	"net/url"
 	"strings"
 )
 
@@ -48,4 +49,27 @@ func (s *Strings) Set(str string) error {
 // String implements the flag.Value interface. It returns the slice as a comma-separated string.
 func (s Strings) String() string {
 	return strings.Join(s, ",")
+}
+
+// URL is a wrapper around a url.URL type.
+// Use it as a flag value when you want to validate a flag as a valid URL.
+type URL struct {
+	url.URL
+}
+
+// Set implements the flag.Value interface. It parses the string as a url.URL value.
+func (u *URL) Set(s string) error {
+	url, err := url.Parse(s)
+	if err != nil {
+		return err
+	}
+
+	u.URL = *url
+
+	return nil
+}
+
+// String implements the flag.Value interface. It returns the underlying url.URL as a string.
+func (u *URL) String() string {
+	return u.URL.String()
 }
