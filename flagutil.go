@@ -81,10 +81,11 @@ func (u *URL) Set(s string) error {
 }
 
 // String implements the flag.Value interface. It returns the underlying url.URL as a string.
-func (u *URL) String() string {
+func (u URL) String() string {
 	return u.URL.String()
 }
 
-func (u *URL) IsValid() bool {
+// IsValid returns true if the URL object is valid, false otherwise. Valid here means it has correctly parsed an URL.
+func (u URL) IsValid() bool {
 	return u.parsed
 }
