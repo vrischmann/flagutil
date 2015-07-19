@@ -1,3 +1,4 @@
+// Package flagutil provides a collection of types implementing the flag.Value interface.
 package flagutil
 
 import (
