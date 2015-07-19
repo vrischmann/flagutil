@@ -2,15 +2,23 @@ package flagutil_test
 
 import (
 	"flag"
+	"io/ioutil"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 	"github.com/vrischmann/flagutil"
 )
 
+var (
+	fs = flag.NewFlagSet("default", flag.ContinueOnError)
+)
+
+func init() {
+	fs.SetOutput(ioutil.Discard)
+}
+
 func TestNetworkAddresses(t *testing.T) {
 	var addrs flagutil.NetworkAddresses
-	fs := flag.NewFlagSet("default", flag.ContinueOnError)
 	fs.Var(&addrs, "H", "Addresses")
 
 	s := []string{"-H", "a:4000,b:5000"}
@@ -22,11 +30,14 @@ func TestNetworkAddresses(t *testing.T) {
 	require.Equal(t, "b:5000", addrs[1])
 	require.Equal(t, "a:4000,b:5000", addrs.String())
 	require.Equal(t, []string{"a:4000", "b:5000"}, addrs.StringSlice())
+
+	s = []string{"-H", "foo,bar"}
+	err = fs.Parse(s)
+	require.NotNil(t, err)
 }
 
 func TestStrings(t *testing.T) {
 	var strings flagutil.Strings
-	fs := flag.NewFlagSet("default", flag.ContinueOnError)
 	fs.Var(&strings, "s", "Strings")
 
 	s := []string{"-s", "foo,bar,baz"}
@@ -42,7 +53,6 @@ func TestStrings(t *testing.T) {
 
 func TestURL(t *testing.T) {
 	var url flagutil.URL
-	fs := flag.NewFlagSet("default", flag.ContinueOnError)
 	fs.Var(&url, "u", "URL")
 
 	s := []string{"-u", "https://google.com"}
@@ -53,18 +63,26 @@ func TestURL(t *testing.T) {
 	require.Equal(t, "google.com", url.URL.Host)
 	require.Equal(t, "https", url.URL.Scheme)
 	require.Equal(t, "https://google.com", url.String())
+
+	s = []string{"-u", "://foobar"}
+	err = fs.Parse(s)
+	require.NotNil(t, err)
 }
 
 func TestURLs(t *testing.T) {
 	var urls flagutil.URLs
-	fs := flag.NewFlagSet("default", flag.ContinueOnError)
-	fs.Var(&urls, "u", "URLs")
+	fs.Var(&urls, "U", "URLs")
 
-	s := []string{"-u", "https://google.com,https://google.de"}
+	s := []string{"-U", "https://google.com,https://google.de"}
 
 	err := fs.Parse(s)
 	require.Nil(t, err)
 	require.Equal(t, 2, len(urls))
 	require.Equal(t, "https://google.com", urls[0].String())
 	require.Equal(t, "https://google.de", urls[1].String())
+	require.Equal(t, "https://google.com,https://google.de", urls.String())
+
+	s = []string{"-U", "://foobar"}
+	err = fs.Parse(s)
+	require.NotNil(t, err)
 }
