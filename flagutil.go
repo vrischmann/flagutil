@@ -55,6 +55,7 @@ func (s Strings) String() string {
 // Use it as a flag value when you want to validate a flag as a valid URL.
 type URL struct {
 	url.URL
+	parsed bool
 }
 
 // Set implements the flag.Value interface. It parses the string as a url.URL value.
@@ -65,6 +66,7 @@ func (u *URL) Set(s string) error {
 	}
 
 	u.URL = *url
+	u.parsed = true
 
 	return nil
 }
@@ -72,4 +74,8 @@ func (u *URL) Set(s string) error {
 // String implements the flag.Value interface. It returns the underlying url.URL as a string.
 func (u *URL) String() string {
 	return u.URL.String()
+}
+
+func (u *URL) IsValid() bool {
+	return u.parsed
 }

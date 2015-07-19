@@ -48,6 +48,7 @@ func TestURL(t *testing.T) {
 
 	err := fs.Parse(s)
 	require.Nil(t, err)
+	require.True(t, url.IsValid())
 	require.Equal(t, "google.com", url.URL.Host)
 	require.Equal(t, "https", url.URL.Scheme)
 	require.Equal(t, "https://google.com", url.String())
