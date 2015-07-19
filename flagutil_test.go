@@ -54,3 +54,17 @@ func TestURL(t *testing.T) {
 	require.Equal(t, "https", url.URL.Scheme)
 	require.Equal(t, "https://google.com", url.String())
 }
+
+func TestURLs(t *testing.T) {
+	var urls flagutil.URLs
+	fs := flag.NewFlagSet("default", flag.ContinueOnError)
+	fs.Var(&urls, "u", "URLs")
+
+	s := []string{"-u", "https://google.com,https://google.de"}
+
+	err := fs.Parse(s)
+	require.Nil(t, err)
+	require.Equal(t, 2, len(urls))
+	require.Equal(t, "https://google.com", urls[0].String())
+	require.Equal(t, "https://google.de", urls[1].String())
+}

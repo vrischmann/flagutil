@@ -89,3 +89,33 @@ func (u URL) String() string {
 func (u URL) IsValid() bool {
 	return u.parsed
 }
+
+// URLs is a slice of url.URL.
+// Use it as a flag value when you want to pass a comma-separated list of strings to a flag
+// and have it to be automatically parsed into a slice and validated as valid url.URL.
+type URLs []url.URL
+
+// Set implements the flag.Value interface. It parses the string as a comma-separated string.
+func (u *URLs) Set(s string) error {
+	for _, t := range strings.Split(s, ",") {
+		url, err := url.Parse(t)
+		if err != nil {
+			return err
+		}
+
+		*u = append(*u, *url)
+	}
+
+	return nil
+}
+
+// String implements the flag.Value interface. It returns the string representation of each url.URL as a comma-separated string.
+func (u URLs) String() string {
+	var r []string
+
+	for _, url := range u {
+		r = append(r, url.String())
+	}
+
+	return strings.Join(r, ",")
+}
