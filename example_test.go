@@ -8,8 +8,8 @@ import (
 	"github.com/vrischmann/flagutil"
 )
 
-func ExampleListenAddresses() {
-	var addrs flagutil.ListenAddresses
+func ExampleNetworkAddresses() {
+	var addrs flagutil.NetworkAddresses
 	flag.Var(&addrs, "H", "Addresses")
 
 	os.Args = append(os.Args, "-H", "localhost:4000,localhost:5000")

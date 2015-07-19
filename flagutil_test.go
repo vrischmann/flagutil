@@ -8,8 +8,8 @@ import (
 	"github.com/vrischmann/flagutil"
 )
 
-func TestListenAddresses(t *testing.T) {
-	var addrs flagutil.ListenAddresses
+func TestNetworkAddresses(t *testing.T) {
+	var addrs flagutil.NetworkAddresses
 	fs := flag.NewFlagSet("default", flag.ContinueOnError)
 	fs.Var(&addrs, "H", "Addresses")
 
