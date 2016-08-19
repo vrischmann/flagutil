@@ -2,9 +2,11 @@
 package flagutil
 
 import (
+	"flag"
 	"net"
 	"net/url"
 	"strings"
+	"time"
 )
 
 // NetworkAddresses is a slice of string that have been validated as valid network addresses.
@@ -28,9 +30,7 @@ func (a *NetworkAddresses) Set(s string) error {
 }
 
 // String implements the flag.Value interface. It returns the slice as a comma-separated string.
-func (a NetworkAddresses) String() string {
-	return strings.Join(a, ",")
-}
+func (a NetworkAddresses) String() string { return strings.Join(a, ",") }
 
 // StringSlice returns the network addresses as a slice of string.
 func (a NetworkAddresses) StringSlice() []string {
@@ -81,14 +81,10 @@ func (u *URL) Set(s string) error {
 }
 
 // String implements the flag.Value interface. It returns the underlying url.URL as a string.
-func (u URL) String() string {
-	return u.URL.String()
-}
+func (u URL) String() string { return u.URL.String() }
 
 // IsValid returns true if the URL object is valid, false otherwise. Valid here means it has correctly parsed an URL.
-func (u URL) IsValid() bool {
-	return u.parsed
-}
+func (u URL) IsValid() bool { return u.parsed }
 
 // URLs is a slice of url.URL.
 // Use it as a flag value when you want to pass a comma-separated list of strings to a flag
@@ -119,3 +115,25 @@ func (u URLs) String() string {
 
 	return strings.Join(r, ",")
 }
+
+type Duration time.Duration
+
+func (d *Duration) Set(s string) error {
+	tmp, err := time.ParseDuration(s)
+	if err != nil {
+		return err
+	}
+
+	*d = Duration(tmp)
+
+	return nil
+}
+
+func (d Duration) String() string { return time.Duration(d).String() }
+
+var (
+	_ flag.Value = (*NetworkAddresses)(nil)
+	_ flag.Value = (*Strings)(nil)
+	_ flag.Value = (*URLs)(nil)
+	_ flag.Value = (*Duration)(nil)
+)
