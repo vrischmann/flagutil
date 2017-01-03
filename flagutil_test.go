@@ -4,6 +4,7 @@ import (
 	"flag"
 	"io/ioutil"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 	"github.com/vrischmann/flagutil"
@@ -85,4 +86,26 @@ func TestURLs(t *testing.T) {
 	s = []string{"-U", "://foobar"}
 	err = fs.Parse(s)
 	require.NotNil(t, err)
+}
+
+func TestDuration(t *testing.T) {
+	var d flagutil.Duration
+	fs.Var(&d, "d", "Duration")
+
+	testCases := []struct {
+		in  string
+		exp time.Duration
+	}{
+		{"10s", 10 * time.Second},
+		{"10ms", 10 * time.Millisecond},
+		{"10m", 10 * time.Minute},
+		{"10h", 10 * time.Hour},
+	}
+
+	for _, tc := range testCases {
+		err := fs.Parse([]string{"-d", tc.in})
+		require.Nil(t, err)
+
+		require.Equal(t, tc.exp, d.Duration)
+	}
 }

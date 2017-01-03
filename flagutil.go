@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/url"
 	"strings"
+	"time"
 )
 
 // NetworkAddresses is a slice of string that have been validated as valid network addresses.
@@ -115,8 +116,28 @@ func (u URLs) String() string {
 	return strings.Join(r, ",")
 }
 
+type Duration struct {
+	time.Duration
+}
+
+func (d *Duration) Set(s string) error {
+	tmp, err := time.ParseDuration(s)
+	if err != nil {
+		return err
+	}
+
+	d.Duration = tmp
+
+	return nil
+}
+
+func (d Duration) String() string {
+	return d.Duration.String()
+}
+
 var (
 	_ flag.Value = (*NetworkAddresses)(nil)
 	_ flag.Value = (*Strings)(nil)
 	_ flag.Value = (*URLs)(nil)
+	_ flag.Value = (*Duration)(nil)
 )
