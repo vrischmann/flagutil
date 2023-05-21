@@ -10,15 +10,15 @@ import (
 	"github.com/vrischmann/flagutil"
 )
 
-var (
-	fs = flag.NewFlagSet("default", flag.ContinueOnError)
-)
-
-func init() {
+func mkFS() *flag.FlagSet {
+	fs := flag.NewFlagSet("foobar", flag.ContinueOnError)
 	fs.SetOutput(io.Discard)
+	return fs
 }
 
 func TestNetworkAddress(t *testing.T) {
+	fs := mkFS()
+
 	var addr flagutil.NetworkAddress
 	fs.Var(&addr, "h", "Address")
 
@@ -34,6 +34,8 @@ func TestNetworkAddress(t *testing.T) {
 }
 
 func TestNetworkAddresses(t *testing.T) {
+	fs := mkFS()
+
 	var addrs flagutil.NetworkAddresses
 	fs.Var(&addrs, "H", "Addresses")
 
@@ -53,6 +55,8 @@ func TestNetworkAddresses(t *testing.T) {
 }
 
 func TestStrings(t *testing.T) {
+	fs := mkFS()
+
 	var strings flagutil.Strings
 	fs.Var(&strings, "s", "Strings")
 
@@ -68,6 +72,8 @@ func TestStrings(t *testing.T) {
 }
 
 func TestURL(t *testing.T) {
+	fs := mkFS()
+
 	var url flagutil.URL
 	fs.Var(&url, "u", "URL")
 
@@ -86,6 +92,8 @@ func TestURL(t *testing.T) {
 }
 
 func TestURLs(t *testing.T) {
+	fs := mkFS()
+
 	var urls flagutil.URLs
 	fs.Var(&urls, "U", "URLs")
 
@@ -104,6 +112,8 @@ func TestURLs(t *testing.T) {
 }
 
 func TestDuration(t *testing.T) {
+	fs := mkFS()
+
 	var d flagutil.Duration
 	fs.Var(&d, "d", "Duration")
 
