@@ -26,7 +26,7 @@ jobs:
     # Unit tests
 
     - name: Run the tests
-      run: go test -race -timeout 20s -v ./...
+      run: go test -mod=readonly -race -timeout 20s -v ./...
 
     # Static analysis
 
