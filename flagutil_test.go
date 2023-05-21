@@ -2,7 +2,7 @@ package flagutil_test
 
 import (
 	"flag"
-	"io/ioutil"
+	"io"
 	"testing"
 	"time"
 
@@ -15,7 +15,7 @@ var (
 )
 
 func init() {
-	fs.SetOutput(ioutil.Discard)
+	fs.SetOutput(io.Discard)
 }
 
 func TestNetworkAddresses(t *testing.T) {
