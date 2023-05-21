@@ -2,6 +2,7 @@ name: Test workflow
 
 on:
   workflow_dispatch:
+  create:
   pull_request:
 
 # This allows a subsequently queued workflow run to interrupt previous runs
