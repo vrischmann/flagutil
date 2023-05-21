@@ -9,6 +9,26 @@ import (
 	"time"
 )
 
+// NetworkAddress is a flag.Value that represents a network address.
+// here a network address means anything that can be parsed by `net.SplitHostPort`.
+type NetworkAddress string
+
+// Set implements the flag.Value interface.
+// It parses the string using `net.SplitHostPort` for validation.
+func (a *NetworkAddress) Set(s string) error {
+	_, _, err := net.SplitHostPort(s)
+	if err != nil {
+		return err
+	}
+
+	*a = NetworkAddress(s)
+
+	return nil
+}
+
+// String implements the flag.Value interface. It returns the slice as a comma-separated string.
+func (a NetworkAddress) String() string { return string(a) }
+
 // NetworkAddresses is a slice of string that have been validated as valid network addresses.
 // Use it as a flag value when you want to pass a comma-separated list of strings to a flag
 // and have it to be automatically parsed into a slice and validated as valid network addresses.
