@@ -8,6 +8,18 @@ import (
 	"github.com/vrischmann/flagutil"
 )
 
+func ExampleNetworkAddress() {
+	var addr flagutil.NetworkAddress
+	flag.Var(&addr, "h", "Address")
+
+	os.Args = append(os.Args, "-h", "localhost:4000")
+	flag.Parse()
+
+	fmt.Println(addr)
+	// Output:
+	// localhost:4000
+}
+
 func ExampleNetworkAddresses() {
 	var addrs flagutil.NetworkAddresses
 	flag.Var(&addrs, "H", "Addresses")

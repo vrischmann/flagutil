@@ -18,6 +18,21 @@ func init() {
 	fs.SetOutput(io.Discard)
 }
 
+func TestNetworkAddress(t *testing.T) {
+	var addr flagutil.NetworkAddress
+	fs.Var(&addr, "h", "Address")
+
+	s := []string{"-h", "a:4000"}
+
+	err := fs.Parse(s)
+	require.Nil(t, err)
+	require.Equal(t, flagutil.NetworkAddress("a:4000"), addr)
+
+	s = []string{"-h", "foo"}
+	err = fs.Parse(s)
+	require.NotNil(t, err)
+}
+
 func TestNetworkAddresses(t *testing.T) {
 	var addrs flagutil.NetworkAddresses
 	fs.Var(&addrs, "H", "Addresses")
